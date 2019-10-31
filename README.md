@@ -39,9 +39,9 @@ B B 1
 ```
 Todos os autômatos que serão testados terão esse formato. Use o símbolo e para denotar o símbolo vazio.
 
-{c:red}Importante{/c}: o autômato será fornecido como um arquivo. Eu não vou ficar digitando na entrada. Seu programa precisa ler esse arquivo com a descrição do autômato.
+`Importante`: o autômato será fornecido como um arquivo. Eu não vou ficar digitando na entrada. Seu programa precisa ler esse arquivo com a descrição do autômato.
 
-{c:red}Importante{/c}: toda a execução de seu programa deverá ser feita via CLI. Tanto do simulador quando da computação das operações.
+`Importante`: toda a execução de seu programa deverá ser feita via CLI. Tanto do simulador quando da computação das operações.
 
 ## Simulador (obrigatório)
 
