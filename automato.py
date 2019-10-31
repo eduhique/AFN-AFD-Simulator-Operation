@@ -1,34 +1,41 @@
-# estados <lista com os nomes dos estados>
-# inicial <nome do estado inicial>
-# aceita <lista com os nomes dos estados de aceitação>
-# <transições>
+import sys
 
-# Note que estados, inicial e aceita são palavras reservadas.
-# <transições> descreve cada transição do autômato (é uma lista) e tem o formato
-# estado1 estado2 0
-# siginifcando que a transição leva do estado1 para o estado2 lendo o símbolo 0.
-# Um exemplo de arquivo de entrada seria
-# estados A, B
-# inicial A
-# aceita B
-# A B 0
-# B A 0
-# A A 1
-# B B 1
-# Todos os autômatos que serão testados terão esse formato. Use o símbolo e para denotar o símbolo vazio.
+# Argumentos iniciais
 
-Automato = {}
+entrada = sys.argv
+arg = ""
+arquivo = ""
 
-def Organiza_entrada(strip, entrada, slplit_key):
-    entrada = entrada.replace(strip)
-    
+# Maquinda de estados
 
-def entrada():
-    estados = False
-    inicial = False
-    aceita = False
+maquina = {}
 
-    while True:
-        entrada = input()
-        if(entrada.startswhith("estados")):
-            aux = entrada.replace("estados", "")
+try:
+    arg = entrada[1]
+    arquivo = open(entrada[2], 'r')
+except:
+  print('Ocorreu algum erro com os argumentos de entrada. arguemnto: ' + str(entrada))
+  exit()
+
+print('Argumento: %s\nLinhas do arquivo: %s\n' % (arg, entrada[2]))
+
+while True:
+    a = arquivo.readline()
+    if a == '':
+      break
+    if a.startswith("estados "):
+        aux = entrada.replace("estados ", "")
+        split = aux.split(",")
+        for i in range(len(split)):
+            split[i] = split[i].strip()
+        maquina["estados"] = split
+    if a.startswith("inicial "):
+        aux = entrada.replace("inicial ", "")
+        maquina["inicial"] = aux
+    if a.startswith("aceita "):
+        aux = entrada.replace("aceita ", "")
+        split = aux.split(",")
+        for i in range(len(split)):
+            split[i] = split[i].strip()
+        maquina["aceita"] = split
+        
