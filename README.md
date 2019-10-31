@@ -82,17 +82,18 @@ Minimização de autômatos. Existe um algoritmo para minimizar um autômato red
 Nesta seção será discutida a resolução do problema
 ## Pseudo Código da Função de transição
 Abaixo segue a ideia de uma função de transição de estado:
-````
+
+```
 function transicao(estado_atual, lista_de_transicoes, palavra):
-    if(estado_atual in estado_de_aceitacao):
-        return "palavra aceita"
-    else if (palavra.isvazia()):
-        return "Palavra não aceita"
+    result = "Palavra não aceita"
+    if(estado_atual in estado_de_aceitacao and palavra.isvazia()):
+        result = "palavra aceita"
     else:
         for elemento in lista:
             if (elemento[0] == estado_atual and elemento[2] == palavra[0]):
                 estado_atual = elemento[1]
-                transicao(estado_atual, lista, palavra[1:])
-            else:
-                return "Palavra não aceita"
+                result = transicao(estado_atual, lista, palavra[1:])
+                if (result == "palavra aceita")
+                    break
+    return result
 ```
