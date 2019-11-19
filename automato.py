@@ -8,6 +8,8 @@ import getopt
 
 x = 0
 z = []
+maquina = {}
+maquina2 = {}
 
 def usage():
     print('''
@@ -70,13 +72,13 @@ def main():
     ###### Trata a entrada para saber se esta de acordo com a especificação ######
     comandLine = sys.argv[1:]
     if len(comandLine) > 2 or len(comandLine) < 2:
-        print '''Confira a linha de comando, esta faltando argumentos.
+        print ('''Confira a linha de comando, esta faltando argumentos.
 Exemplos de execucao:
 
     $ geee.py -s arquivo.txt
     $ geee.py -u arquivo.txt
     $ geee.py -i arquivo.txt
-    $ geee.py -co arquivo.txt'''
+    $ geee.py -co arquivo.txt''')
         return
     
     ###### Captura o arquivo que sera lido ######
@@ -87,11 +89,30 @@ Exemplos de execucao:
         opts, args = getopt.getopt(sys.argv[1:], "s:c:u:i:e:c", [
                                    "simulador=", "conversao=", "uniao=", "intersecao=", "estrela=", "complemento="])
     except getopt.GetoptError as err:
-        print str(err)
+        print (str(err))
 
+    arquivo = open(file, 'r')
     for o, a in opts:
         if o in ("-s", "--simulador"):
-            x = 3
+            while True:
+                a = arquivo.readline()
+                if a == '':
+                    break
+                if a.startswith("estados "):
+                    aux = a.replace("estados ", "")
+                    split = aux.split(",")
+                    for i in range(len(split)):
+                        split[i] = split[i].strip()
+                    maquina["estados"] = split
+                if a.startswith("inicial "):
+                    aux = a.replace("inicial ", "")
+                    maquina["inicial"] = aux.split("\n")[0]
+                    if a.startswith("aceita "):
+                        aux = a.replace("aceita ", "")
+                        split = aux.split(",")
+                        for i in range(len(split)):
+                            split[i] = split[i].strip()
+                        maquina["aceita"] = split
         elif o in ("-c", "--conversao"):
             x = 4
         elif o in ("-u", "--uniao"):
@@ -105,53 +126,7 @@ Exemplos de execucao:
         else:
             assert False,"Unhandled Option"
 
-    print "File = " + file
-    print "X = %d, sofreu alteracao?(depois do parametro)" % x
+    print ("File = " + file)
+    print (maquina)
 
 main()
-
-
-
-
-################################################################################################################
-######################### Codigo antigo a ser refatorado para o modelo de cima #################################
-
-# Argumentos iniciais
-
-entrada = sys.argv
-arg = ""
-arquivo = ""
-
-# Maquinda de estados
-
-maquina = {}
-
-try:
-    arg = entrada[1]
-    arquivo = open(entrada[2], 'r')
-except:
-  print('Ocorreu algum erro com os argumentos de entrada. arguemnto: ' + str(entrada))
-  exit()
-
-print('Argumento: %s\nLinhas do arquivo: %s\n' % (arg, entrada[2]))
-
-while True:
-    a = arquivo.readline()
-    if a == '':
-      break
-    if a.startswith("estados "):
-        aux = entrada.replace("estados ", "")
-        split = aux.split(",")
-        for i in range(len(split)):
-            split[i] = split[i].strip()
-        maquina["estados"] = split
-    if a.startswith("inicial "):
-        aux = entrada.replace("inicial ", "")
-        maquina["inicial"] = aux
-    if a.startswith("aceita "):
-        aux = entrada.replace("aceita ", "")
-        split = aux.split(",")
-        for i in range(len(split)):
-            split[i] = split[i].strip()
-        maquina["aceita"] = split
-        
