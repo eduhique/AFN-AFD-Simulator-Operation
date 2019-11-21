@@ -1,0 +1,13 @@
+estados N,A1,B1,A2,B2,C2
+inicial N
+aceita B1,C2
+N A1 e
+N A2 e
+A1 B1 0
+B1 A1 0
+A1 A1 1
+B1 B1 1
+A2 B2 0
+A2 A2 0
+A2 A2 1
+B2 C2 1

@@ -86,6 +86,8 @@ Cada operação adicional valerá pontuação extra.
 
 ## Solução
 
+*`Importante`: Muito provavelmente, essas sugestões de solução possem alguns erros ou preceisam ser adptadas para funcionar em uma situação real.*
+
 Nesta seção será discutida a resolução do problema
 
 ### Pseudo Código da Função de transição do Simulador
@@ -93,7 +95,7 @@ Nesta seção será discutida a resolução do problema
 Abaixo segue a ideia de uma função de transição de estado:
 
 ```{text}
-function transicao(estado_atual, lista_de_transicoes, palavra):
+function transicao(estado_atual, lista_de_transicoes, palavra, estado_de_aceitacao):
     result = "Palavra não aceita"
     if(estado_atual in estado_de_aceitacao and palavra.isvazia()):
         result = "palavra aceita"
@@ -101,31 +103,96 @@ function transicao(estado_atual, lista_de_transicoes, palavra):
         for elemento in lista_de_transicoes:
             if (elemento[0] == estado_atual and elemento[2] == palavra[0]):
                 estado_atual = elemento[1]
-                result = transicao(estado_atual, lista, palavra[1:])
+                result = transicao(estado_atual, lista_de_transicoes, palavra[1:])
                 if (result == "palavra aceita")
                     break
     return result
 ```
 
-### Pseudo Código da Função de União
+#### Pseudo Código da Função de gerar saida de automato
+
+Código auxiliar para geração de automatos na saida do programa no modelo definido na especificação.
+
+```{text}
+function saidaAuto(lista_estados, inicial, lista_aceita, lista_transicao):
+    estados = "estados "
+    inicial_saida = "inicial " + inicial
+    aceita = "aceita "
+    for elemento in lista_estados:
+        estados += (elemento + ", ")
+    print (estados[:-1] + "\n" + inicial_saida + "\n")
+    for elemento in lista_aceita:
+        estados += (elemento + ", ")
+    print (aceita[:-1] + "\n")
+    for elemento in lista_transicao:
+        print (elemento[1] + " " + elemento[2] + " " + elemento[3] + "\n")
+```
+
+### Operações
+
+#### Pseudo Código da Função de Coneversão
+
+```{text}
+Ainda falta fazer
+```
+
+#### Pseudo Código da Função de União
 
 Para efeitos praticos chamarei o novo estado inicial de estado `N`.segue Abaixo ideia de codigo de união:
 
 ```{text}
 function uniao(maquina_1, maquina_2):
-    print ("estados N, ")
+    lista_estados = ["N"]
+    inicial = "N"
+    lista_aceita = [] 
+    lista_transicao = []
+
     for elemento in maquina_1["estados"]:
-        print (elemento + "1, ")
+        lista_estados.append((elemento + "1"))
     for elemento in maquina_2["estados"]:
-        print (elemento + "2, ")
-    print ("\ninicial N\naceita ")
+        lista_estados.append((elemento + "2"))
     for elemento in maquina_1["aceita"]:
-        print (elemento + "1, ")
+        lista_aceita.append((elemento + "1"))
     for elemento in maquina_2["aceita"]:
-        print (elemento + "2, ")
-    print ("\n" + "N " +  maquina_1["inicial"] + "1 e\nN " +  maquina_2["inicial"] + "2 e\n")
+        lista_aceita.append((elemento + "2"))
+    lista_transicao.append(["N", maquina_1["inicial"] + "1", "e"])
+    lista_transicao.append(["N", maquina_2["inicial"] + "2", "e"])
     for elemento in maquina_1["lista_de_transicoes"]:
-        print (elemento[1] + "1 " + elemento[2] + "1 " + elemento[3] + "1\n")
+        lista_transicao.append([(elemento[1] + "1"), (elemento[2] + "1"), (elemento[3] + "1")])
     for elemento in maquina_2["lista_de_transicoes"]:
-        print (elemento[1] + "2 " + elemento[2] + "2 " + elemento[3] + "2\n")
+        lista_transicao.append([(elemento[1] + "2"), (elemento[2] + "2"), (elemento[3] + "2")])
+    function saidaAuto(lista_estados, inicial, lista_aceita, lista_transicao)
+```
+
+#### Pseudo Código da Função de Intersecção
+
+```{text}
+Ainda falta fazer
+```
+
+#### Pseudo Código da Função de Complemento
+
+```{text}
+function complemento(maquina_1):
+    lista_aceita = []
+    for elemento in maquina_1["estados"]:
+        if (elmento not in maquina_1["aceita"]):
+            lista_aceita.append(elemento)
+    function saidaAuto(maquina_1["estados"], maquina_1["inicial"], lista_aceita, maquina_2["lista_de_transicoes"])
+```
+
+#### Pseudo Código da Função Estrela
+
+Para efeitos praticos chamarei o novo estado inicial de estado `N`.segue Abaixo ideia de codigo de Estrela:
+
+```{text}
+function estrela(maquina_1):
+    lista_estados = ["N"]
+    inicial = "N"
+    lista_transicao = maquina_1["lista_de_transicoes"]
+    for elemento in maquina_1["estados"]:
+        lista_estados.append((elemento))
+    for elemento in maquina_1["aceita"]:
+        lista_transicao.append([elemento, "N",  "e"])
+    function saidaAuto(lista_estados, inicial, maquina_1["aceita"], lista_transicao)
 ```
