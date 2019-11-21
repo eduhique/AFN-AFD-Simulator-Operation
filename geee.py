@@ -31,6 +31,7 @@ def usage():
     $ geee.py -u arquivo1.txt arquivo2.txt
     $ geee.py -i arquivo1.txt arquivo2.txt
     $ geee.py -c arquivo.txt
+    $ geee.py -e arquivo.txt
     ''')
     sys.exit()
 
@@ -94,9 +95,11 @@ def uniao(maquina_1, maquina_2):
         lista_transicao.append([(elemento[0] + "2"), (elemento[1] + "2"), (elemento[2])])
     saidaAuto(lista_estados, inicial, lista_aceita, lista_transicao)
 
+
+# Função testada usando os arquivos entrada1.txt e entrada2.txt. Resultado armazenado no arquivo intersecao-entrada1-e-entrada2.txt (#Euclides)
 def intersecao(maquina_1, maquina_2):
-    lista_estados = ["N"]
-    inicial = "N"
+    lista_estados = []
+    inicial = maquina_1["inicial"] + "1" + maquina_2["inicial"] + "2"
     lista_aceita = [] 
     lista_transicao = []
 
@@ -107,8 +110,6 @@ def intersecao(maquina_1, maquina_2):
     for elemento1 in maquina_1["aceita"]:
         for elemento2 in maquina_2["aceita"]:
             lista_aceita.append(elemento1 + "1" + elemento2 + "2")
-
-    lista_transicao.append(["N", maquina_1["inicial"] + "1" + maquina_2["inicial"] + "2", "e"])
 
     for elemento1 in maquina_1["transicao"]:
         for elemento2 in maquina_2["transicao"]:
