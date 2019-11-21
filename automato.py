@@ -23,14 +23,14 @@ def usage():
     -u  --uniao
     -i  --intersecao
     -e  --estrela
-    -c -- complemento
+    -c  --complemento
 
 
     Exemplos:
     $ geee.py -s arquivo.txt
-    $ geee.py -u arquivo.txt
-    $ geee.py -i arquivo.txt
-    $ geee.py -co arquivo.txt
+    $ geee.py -u arquivo1.txt arquivo2.txt
+    $ geee.py -i arquivo1.txt arquivo2.txt
+    $ geee.py -c arquivo.txt
     ''')
     sys.exit()
 
@@ -94,8 +94,28 @@ def uniao(maquina_1, maquina_2):
         lista_transicao.append([(elemento[0] + "2"), (elemento[1] + "2"), (elemento[2])])
     saidaAuto(lista_estados, inicial, lista_aceita, lista_transicao)
 
-def intersecao():
-    pass
+def intersecao(maquina_1, maquina_2):
+    lista_estados = ["N"]
+    inicial = "N"
+    lista_aceita = [] 
+    lista_transicao = []
+
+    for elemento1 in maquina_1["estados"]:
+        for elemento2 in maquina_2["estados"]:
+            lista_estados.append(elemento1 + "1" + elemento2 + "2")
+    
+    for elemento1 in maquina_1["aceita"]:
+        for elemento2 in maquina_2["aceita"]:
+            lista_aceita.append(elemento1 + "1" + elemento2 + "2")
+
+    lista_transicao.append(["N", maquina_1["inicial"] + "1" + maquina_2["inicial"] + "2", "e"])
+
+    for elemento1 in maquina_1["transicao"]:
+        for elemento2 in maquina_2["transicao"]:
+            if (elemento1[2] == elemento2[2]):
+                lista_transicao.append([(elemento1[0] + "1" + elemento2[0] + "2"), (elemento1[1] + "1" + elemento2[1] + "2"), elemento1[2]])
+    
+    saidaAuto(lista_estados, inicial, lista_aceita, lista_transicao)
 
 
 def estrela(maquina_1):
@@ -237,7 +257,10 @@ Exemplos de execucao:
             geraMaquina2(file2)
             uniao(maquina, maquina2)
         elif o in ("-i", "--intersecao"):
-            pass
+            geraMaquina1(file)
+            file2 = comandLine[2]
+            geraMaquina2(file2)
+            intersecao(maquina, maquina2)
         elif o in ("-e", "--estrela"):
             geraMaquina1(file)
             estrela(maquina)
