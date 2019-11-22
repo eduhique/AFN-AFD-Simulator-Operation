@@ -44,10 +44,10 @@ def simulador(estado_atual, lista_de_transicoes, palavra, estado_de_aceitacao):
         return "\npalavra aceita"
     elif(len(palavra) > 0):
         result = "\npalavra não aceita"
-        achou = False
+        # achou = False
         for elemento in lista_de_transicoes:
             if (elemento[0] == estado_atual and (elemento[2] == palavra[0] or elemento[2] == "e")):
-                achou = True
+                # achou = True
                 print(estado_atual + "            " + palavra)
                 aux = ""
                 if (elemento[2] == "e"):
@@ -60,16 +60,41 @@ def simulador(estado_atual, lista_de_transicoes, palavra, estado_de_aceitacao):
                 if (aux == "\npalavra aceita"):
                     result = aux
                     break
-        if(achou == False):
-            print(estado_atual + "            " + palavra)
-            # Tem que perguntar o prof o que fazer quando recebe uma palavra que não possui um determinada transição(eduardo) 
-            # return simulador(estado_atual, lista_de_transicoes, palavra[1:], estado_de_aceitacao)
+        # if(achou == False):
+        #     print(estado_atual + "            " + palavra)
+        #     # Tem que perguntar o prof o que fazer quando recebe uma palavra que não possui um determinada transição(eduardo) 
+        #     # return simulador(estado_atual, lista_de_transicoes, palavra[1:], estado_de_aceitacao)
         return result
     elif(len(palavra) == 0):
         return "\npalavra não aceita"
 
-def conversao():
-    pass
+def conversao(maquina_1):
+    new_estados = geraEstados(maquina_1["estados"])
+    print(new_estados)
+    print (len(new_estados))
+
+######### Precisa ser revisto ##########
+def geraEstados(lista_estados):
+    result = [x for x in powerset(lista_estados)]
+    result.sort(reverse=True, key=myLen)
+    result.reverse()
+    for e in result:
+        if len(e) == 0:
+            e.append("ø")
+            break
+    return result
+
+def powerset(list):
+    if len(list) <= 1:
+        yield list
+        yield []
+    else:
+        for item in powerset(list[1:]):
+            yield [list[0]]+item
+            yield item
+
+def myLen(e):
+    return len(e)
 
 # função testada usando os arquivos entrada1.txt e entrada2.txt (eduardo) 
 def uniao(maquina_1, maquina_2):
@@ -104,11 +129,13 @@ def estrela(maquina_1):
     lista_transicao = maquina_1["transicao"]
     for elemento in maquina_1["estados"]:
         lista_estados.append((elemento))
+    lista_transicao.append(["N", maquina_1["inicial"], "e"])
     for elemento in maquina_1["aceita"]:
         lista_transicao.append([elemento, "N",  "e"])
     saidaAuto(lista_estados, inicial, maquina_1["aceita"], lista_transicao)
 
 # Tem que verificar um detalhe com o professor (eduardo) 
+# De acordo com o prof, está solução só funciona para AFD, portanto, para AFN deve-se converter e depois operar sobre
 def complemento(maquina_1):
     lista_aceita = []
     for elemento in maquina_1["estados"]:
@@ -130,7 +157,22 @@ def saidaAuto(lista_estados, inicial, lista_aceita, lista_transicao):
     for elemento in lista_transicao:
         print (elemento[0] + " " + elemento[1] + " " + elemento[2])
 
-############### Funções que geram maquinas de estados ###############
+def afn_checker(lista_transicao, lista_estados):
+    count = 0
+    for elemento in lista_transicao:
+        if "e" == elemento[2]:
+            return True
+    for estado in lista_estados:
+        for elemento in lista_transicao:
+            if estado == elemento[0] and elemento[2] != "e":
+                count += 1
+        if count < 2 or count > 2:
+            return True
+        else:
+            count = 0  
+    return False
+
+############### Funções que geram maquinas de estados ####################
 # Como são no máximo duas maquinas essa funcões manipula duas variaveis ja instanciadas(eduardo) 
 # Serve apenas como refatoração do codigo main() (eduardo)
 
@@ -188,7 +230,6 @@ def geraMaquina2(file):
             split = (l.split("\n")[0]).split(" ")
             maquina2["transicao"].append(split)
 
-
 ####################################################################################
 #print len(sys.argv[1:])
 #print "X = %d, sofreu alteracao?(antes do paramentro)" % x
@@ -230,7 +271,13 @@ Exemplos de execucao:
             print("Estado       Palavra")
             print (simulador(maquina["inicial"], maquina["transicao"], palavra, maquina["aceita"]))
         elif o in ("-c", "--conversao"):
-            x = 4
+            geraMaquina1(file)
+            check = afn_checker(maquina["transicao"],maquina["estados"])
+            print ("É uma AFN? " + str(check))
+            if (check):
+                conversao(maquina)
+            else:
+                print("\nO automato '" + file + "' já é uma AFD, portanto, não precisa de conversão :D.\n")
         elif o in ("-u", "--uniao"):
             geraMaquina1(file)
             file2 = comandLine[2]
@@ -243,6 +290,7 @@ Exemplos de execucao:
             estrela(maquina)
         elif o in ("-l", "--complemento"):
             geraMaquina1(file)
+            #gerar AFD antes se for AFN
             complemento(maquina)
         else:
             assert False,"Unhandled Option"
