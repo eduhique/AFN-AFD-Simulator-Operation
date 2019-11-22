@@ -1,11 +1,69 @@
+
 def conversao(maquina_1):
+    result = {}
     new_estados = geraEstados(maquina_1["estados"])
     inicial = geraIncial(maquina_1, new_estados)
-    print (new_estados)
-    print (inicial)
-    
+    new_aceitacao = geraAceita(maquina_1["aceita"], new_estados)
+    transicoes = geraTransicao(maquina_1["transicao"], new_estados)
+    estados_final = organizaEstados(new_estados)
+    inicial_final = "".join(inicial)
+    lista_aceita_final = organizaEstados(new_aceitacao)
+    transicoes_final = organizaTransicoes(transicoes)
+    result["estados"] = organizaEstados(new_estados)
+    result["inicial"] = "".join(inicial)
+    result["aceita"] = organizaEstados(new_aceitacao)
+    result["transicao"] = organizaTransicoes(transicoes)
+    return result
 
 ######### Precisa ser revisto ##########
+
+def organizaEstados(new_estados):
+    result = []
+    for elemento in new_estados:
+        result.append("".join(elemento))
+    return result
+
+def organizaTransicoes(transicoes):
+    result = []
+    for elemento in transicoes:
+        result.append(["".join(elemento[0]), "".join(elemento[1]), elemento[2]])
+    return result
+
+def geraAceita(list_aceita, new_estados):
+    result = []
+    for estado in new_estados:
+        for e in estado:
+            if (e in list_aceita):
+                result.append(estado)
+                break
+    return result
+
+def geraTransicao(list_transicao, new_estados):
+    result = []
+    alfabeto = []
+    casos_epson = []
+    for transicao in list_transicao:
+        if transicao[2] != "e" and transicao[2] not in alfabeto:
+            alfabeto.append(transicao[2])
+        if transicao[2] == "e":
+            casos_epson.append(transicao)
+    alfabeto.sort()
+    for estado in new_estados:
+        for entrada in alfabeto:
+            aux = []
+            for elemento in list_transicao:
+                if (elemento[0] in estado and (elemento[2] == entrada) and elemento[1] not in aux):
+                    aux.append(elemento[1])
+                    # Gambiarra para resolver probema no caso entrada7.txt
+                    if([elemento[1], elemento[0], "e"] in casos_epson and elemento[0] not in aux):
+                        aux.append(elemento[0])
+            aux.sort()
+            if aux in new_estados:
+                result.append([estado,aux,entrada])
+            elif len(aux) == 0:
+                result.append([estado,["ø"],entrada])
+    return result
+
 def geraIncial(maquina_1, lista_estados):
     result = []
     inicial_ant = maquina_1["inicial"]
@@ -31,8 +89,6 @@ def geraEstados(lista_estados):
         if len(e) == 0:
             e.append("ø")
             break
-    # for e in aux:
-    #     result.append("".join(e))
     return result
 
 def powerset(list):

@@ -141,27 +141,39 @@ Exemplos de execucao:
             check = afn_checker(maquina["transicao"],maquina["estados"])
             print ("É uma AFN? " + str(check))
             if (check):
-                conversao(maquina)
+                new_maquina = conversao(maquina)
+                print(saidaAuto(new_maquina["estados"], new_maquina["inicial"], new_maquina["aceita"], new_maquina["transicao"]))
             else:
                 print("\nO automato '" + file + "' já é uma AFD, portanto, não precisa de conversão :D.\n")
         elif o in ("-u", "--uniao"):
             geraMaquina1(file)
             file2 = comandLine[2]
             geraMaquina2(file2)
-            uniao(maquina, maquina2)
+            new_maquina = uniao(maquina, maquina2)
+            print(saidaAuto(new_maquina["estados"], new_maquina["inicial"], new_maquina["aceita"], new_maquina["transicao"]))
         elif o in ("-i", "--intersecao"):
             geraMaquina1(file)
             file2 = comandLine[2]
             geraMaquina2(file2)
-            intersecao(maquina, maquina2)
+            new_maquina = intersecao(maquina, maquina2)
+            print(saidaAuto(new_maquina["estados"], new_maquina["inicial"], new_maquina["aceita"], new_maquina["transicao"]))
         elif o in ("-e", "--estrela"):
             geraMaquina1(file)
-            estrela(maquina)
+            new_maquina = estrela(maquina)
+            print(saidaAuto(new_maquina["estados"], new_maquina["inicial"], new_maquina["aceita"], new_maquina["transicao"]))
         elif o in ("-l", "--complemento"):
             geraMaquina1(file)
-            #gerar AFD antes se for AFN
-            complemento(maquina)
+            check = afn_checker(maquina["transicao"],maquina["estados"])
+            print ("É uma AFN? " + str(check))
+            if (check):
+                print("\nSerá feita a conversão antes de aplicar o Complemento")
+                maquina_convert = conversao(maquina)
+                new_maquina = complemento(maquina_convert)
+                print(saidaAuto(new_maquina["estados"], new_maquina["inicial"], new_maquina["aceita"], new_maquina["transicao"]))
+            else:
+                print("\nComo o automato '" + file + "' já é uma AFD, Será realizado o complemento diretamente sem conversão.add()\n")
+                new_maquina = complemento(maquina)
+                print(saidaAuto(new_maquina["estados"], new_maquina["inicial"], new_maquina["aceita"], new_maquina["transicao"]))
         else:
             assert False,"Unhandled Option"
-
 main()

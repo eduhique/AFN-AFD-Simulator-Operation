@@ -1,16 +1,17 @@
 def saidaAuto(lista_estados, inicial, lista_aceita, lista_transicao):
-    estados = "estados "
+    result = "\nAutomato: \n\nestados "
     inicial_saida = "inicial " + inicial
     aceita = "aceita "
     for elemento in lista_estados:
-        estados += (elemento + ",")
-    print("\nAutomato: \n")
-    print (estados[:-1] + "\n" + inicial_saida)
+        result += (elemento + ",")
+    result = result[:-1]
+    result += "\n" + inicial_saida
     for elemento in lista_aceita:
         aceita += (elemento + ",")
-    print (aceita[:-1])
+    result += "\n" +  aceita[:-1]
     for elemento in lista_transicao:
-        print (elemento[0] + " " + elemento[1] + " " + elemento[2])
+        result += "\n" +  elemento[0] + " " + elemento[1] + " " + elemento[2]
+    return result
 
 def afn_checker(lista_transicao, lista_estados):
     count = 0
