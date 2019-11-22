@@ -1,0 +1,167 @@
+# coding: utf-8
+
+# Onde estamos -> A CLI esta quase 100%, a unica coisa que falta eh retornar um erro quando o argumento eh invalido (#WeS)
+#              -> Refatorar o codigo que tinha sido feito anteriormente para o modelo abaixo (Acho que fica mais bonito #WeS)
+#
+import sys
+import getopt
+from simulador import simulador
+from conversao import conversao
+from operacoes import uniao,intersecao, complemento, estrela
+from util import saidaAuto, afn_checker
+
+x = 0
+z = []
+maquina = {}
+maquina2 = {}
+
+def usage():
+    print('''
+    Ferramenta desenvolvida para o Projeto da cadeira de Teoria da Computação
+    GEEE
+
+    Para usar nossa ferramenta: main.py ou main.py -h
+
+    -s  --simulador
+    -c  --conversao                                                     de AFN para AFD
+    -u  --uniao
+    -i  --intersecao
+    -e  --estrela
+    -c  --complemento
+
+
+    Exemplos:
+    $ main.py -s arquivo.txt
+    $ main.py -u arquivo1.txt arquivo2.txt
+    $ main.py -i arquivo1.txt arquivo2.txt
+    $ main.py -c arquivo.txt
+    $ main.py -e arquivo.txt
+    ''')
+    sys.exit()
+
+############### Funções que geram maquinas de estados ####################
+# Como são no máximo duas maquinas essa funcões manipula duas variaveis ja instanciadas(eduardo) 
+# Serve apenas como refatoração do codigo main() (eduardo)
+# Será que essas funções deveriam ser modularizadas? (eduardo)
+
+def geraMaquina1(file):
+    arquivo = open(file, 'r')
+    list = []
+    maquina["transicao"] = list
+    while True:
+        l = arquivo.readline()
+        if l == '':
+            break
+        elif l.startswith("estados "):
+            aux = l.replace("estados ", "")
+            split = aux.split(",")
+            for i in range(len(split)):
+                split[i] = split[i].strip()
+            maquina["estados"] = split
+        elif l.startswith("inicial "):
+            aux = l.replace("inicial ", "")
+            maquina["inicial"] = aux.split("\n")[0]
+        elif l.startswith("aceita "):
+            aux = l.replace("aceita ", "")
+            split = aux.split(",")
+            for i in range(len(split)):
+                split[i] = split[i].strip()
+            maquina["aceita"] = split
+        else:
+            split = (l.split("\n")[0]).split(" ")
+            maquina["transicao"].append(split)
+
+def geraMaquina2(file):
+    arquivo = open(file, 'r')
+    list = []
+    maquina2["transicao"] = list
+    while True:
+        l = arquivo.readline()
+        if l == '':
+            break
+        elif l.startswith("estados "):
+            aux = l.replace("estados ", "")
+            split = aux.split(",")
+            for i in range(len(split)):
+                split[i] = split[i].strip()
+            maquina2["estados"] = split
+        elif l.startswith("inicial "):
+            aux = l.replace("inicial ", "")
+            maquina2["inicial"] = aux.split("\n")[0]
+        elif l.startswith("aceita "):
+            aux = l.replace("aceita ", "")
+            split = aux.split(",")
+            for i in range(len(split)):
+                split[i] = split[i].strip()
+            maquina2["aceita"] = split
+        else:
+            split = (l.split("\n")[0]).split(" ")
+            maquina2["transicao"].append(split)
+
+####################################################################################
+
+###### A magica acontecendo ######
+def main():
+    if not len(sys.argv[1:]):
+        usage()
+    
+
+    ###### Trata a entrada para saber se esta de acordo com a especificação ######
+    comandLine = sys.argv[1:]
+    if len(comandLine) > 3 or len(comandLine) < 2:
+        print ('''Confira a linha de comando, esta faltando argumentos.
+Exemplos de execucao:
+
+    $ main.py -s arquivo.txt palavra
+    $ main.py -u arquivo1.txt arquivo2.txt
+    $ main.py -i arquivo.txt arquivo1.txt arquivo2.txt
+    $ main.py -e arquivo.txt
+    $ main.py -c arquivo.txt
+    $ main.py -co arquivo.txt''')
+        return
+    
+    ###### Captura o arquivo que sera lido ######
+    file = comandLine[1]
+    
+    ###### Captura a linha de comando e faz a verificao para agir com tal   ######
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "s:c:u:i:e:l", [
+                                   "simulador=", "conversao=", "uniao=", "intersecao=", "estrela=", "complemento="])
+    except getopt.GetoptError as err:
+        print (str(err))
+
+    for o, a in opts:
+        if o in ("-s", "--simulador"):
+            geraMaquina1(file)
+            palavra = comandLine[2]
+            print("Estado       Palavra")
+            print (simulador(maquina["inicial"], maquina["transicao"], palavra, maquina["aceita"]))
+        elif o in ("-c", "--conversao"):
+            geraMaquina1(file)
+            check = afn_checker(maquina["transicao"],maquina["estados"])
+            print ("É uma AFN? " + str(check))
+            if (check):
+                conversao(maquina)
+            else:
+                print("\nO automato '" + file + "' já é uma AFD, portanto, não precisa de conversão :D.\n")
+        elif o in ("-u", "--uniao"):
+            geraMaquina1(file)
+            file2 = comandLine[2]
+            geraMaquina2(file2)
+            uniao(maquina, maquina2)
+        elif o in ("-i", "--intersecao"):
+            geraMaquina1(file)
+            file2 = comandLine[2]
+            geraMaquina2(file2)
+            intersecao(maquina, maquina2)
+        elif o in ("-e", "--estrela"):
+            geraMaquina1(file)
+            estrela(maquina)
+        elif o in ("-l", "--complemento"):
+            geraMaquina1(file)
+            #gerar AFD antes se for AFN
+            complemento(maquina)
+        else:
+            assert False,"Unhandled Option"
+
+main()
