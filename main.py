@@ -134,8 +134,13 @@ Exemplos de execucao:
         if o in ("-s", "--simulador"):
             geraMaquina1(file)
             palavra = comandLine[2]
-            print("Estado       Palavra")
-            print (simulador(maquina["inicial"], maquina["transicao"], palavra, maquina["aceita"]))
+            print("Todos os caminhos tentados:\n\nEstado       Palavra")
+            result_simula = simulador(maquina["inicial"], maquina["transicao"], palavra, maquina["aceita"])
+            if (result_simula.split("\n")[-1] == "palavra aceita"):
+                    print("\n\nCaminho até um estado aceito:\nEstado       Palavra")
+                    print(result_simula)
+            else:
+                    print(result_simula)
         elif o in ("-c", "--conversao"):
             geraMaquina1(file)
             check = afn_checker(maquina["transicao"],maquina["estados"])
