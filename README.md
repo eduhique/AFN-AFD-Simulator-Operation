@@ -2,6 +2,96 @@
 
 Este projeto é parte da nota da disciplina de Teoria da Computação(TC) de 2019.2
 
+## Como executar
+
+A projeto foi feito usando `python3`. E para executar comando deve ser de acordo com os exemplos a seguir.
+
+### Simulador
+
+O simulador deve receber a entrada no seguinte formato:
+
+```{shell}
+$ python3 main.py -s arquivo.txt palavra
+```
+
+exemplo de aplicação:
+
+```{shell}
+$ python3 main.py -s automatos/entrada.txt 101
+```
+
+### Transformação
+
+A Operação de Transformação deve receber a entrada no seguinte formato:
+
+```{shell}
+$ python3 main.py -c arquivo.txt
+```
+Antes de realizar a conversão, é verificado se o autormato passado é uma AFN, caso sim é realizado a conversão, caso não é retornado uma mensagem informando que o mesmo ja é uma AFD.
+
+exemplo de aplicação:
+
+```{shell}
+$ python3 main.py -c automatos/entrada.txt
+```
+
+### União
+
+A Operação de União deve receber a entrada no seguinte formato:
+
+```{shell}
+$ python3 main.py -u arquivo.txt arquivo2.txt
+```
+
+exemplo de aplicação:
+
+```{shell}
+python3 main.py -u automatos/entrada1.txt automatos/entrada2.txt
+```
+
+### Intersecção
+
+A Operação de Intersecção deve receber a entrada no seguinte formato:
+
+```{shell}
+$ python3 main.py -i arquivo.txt arquivo2.txt
+```
+
+exemplo de aplicação:
+
+```{shell}
+$ python3 main.py -i automatos/entrada1.txt automatos/entrada2.txt
+```
+
+### Estrela
+
+A Operação de Estrela deve receber a entrada no seguinte formato:
+
+```{shell}
+$ python3 main.py -e arquivo.txt
+```
+
+exemplo de aplicação:
+
+```{shell}
+$ python3 main.py -e automatos/entrada1.txt
+```
+
+### Complemento
+
+A Operação de Complemento deve receber a entrada no seguinte formato:
+
+```{shell}
+$ python3 main.py -l arquivo.txt
+```
+Antes de ser realizada a conversão é feita a verificação se o automato é um AFN. Se sim, é feita a conversão para AFD para facilitar a excução da operação.
+
+exemplo de aplicação:
+
+```{shell}
+$ python3 main.py -l automatos/entrada1.txt
+```
+
 ## Problema
 
 ### Resumo
@@ -167,7 +257,7 @@ function uniao(maquina_1, maquina_2):
 #### Pseudo Código da Função de Intersecção
 
 ```{text}
-Ainda falta fazer
+Feito diretamente
 ```
 
 #### Pseudo Código da Função de Complemento

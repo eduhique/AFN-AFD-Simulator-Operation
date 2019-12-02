@@ -7,8 +7,6 @@ from conversao import conversao
 from operacoes import uniao,intersecao, complemento, estrela
 from util import saidaAuto, afn_checker
 
-x = 0
-z = []
 maquina = {}
 maquina2 = {}
 
@@ -17,22 +15,25 @@ def usage():
     Ferramenta desenvolvida para o Projeto da cadeira de Teoria da Computação
     GEEE
 
-    Para usar nossa ferramenta: main.py ou main.py -h
+    Para usar nossa ferramenta: python3 main.py ou python3 main.py -h --Para ter uma help
+    ex: $ python3 main.py
+    
+    Argumentos:
 
     -s  --simulador
-    -c  --conversao                                                     de AFN para AFD
+    -c  --conversao de AFN para AFD
     -u  --uniao
     -i  --intersecao
     -e  --estrela
-    -c  --complemento
-
+    -l  --complemento
 
     Exemplos:
-    $ main.py -s arquivo.txt
-    $ main.py -u arquivo1.txt arquivo2.txt
-    $ main.py -i arquivo1.txt arquivo2.txt
-    $ main.py -c arquivo.txt
-    $ main.py -e arquivo.txt
+    $ python3 main.py -s arquivo.txt 10010
+    $ python3 main.py -u arquivo1.txt arquivo2.txt
+    $ python3 main.py -i arquivo1.txt arquivo2.txt
+    $ python3 main.py -c arquivo.txt
+    $ python3 main.py -e arquivo.txt
+    $ python3 main.py -l arquivo.txt
     ''')
     sys.exit()
 
@@ -40,19 +41,18 @@ def retornoErros():
     print ('''Confira a linha de comando, esta faltando argumentos.
 Exemplos de execucao:
 
-    $ main.py -s arquivo.txt palavra
-    $ main.py -u arquivo1.txt arquivo2.txt
-    $ main.py -i arquivo.txt arquivo1.txt arquivo2.txt
-    $ main.py -e arquivo.txt
-    $ main.py -c arquivo.txt
-    $ main.py -co arquivo.txt''')
+    $ python3 main.py -s arquivo.txt palavra
+    $ python3 main.py -u arquivo1.txt arquivo2.txt
+    $ python3 main.py -i arquivo.txt arquivo1.txt arquivo2.txt
+    $ python3 main.py -e arquivo.txt
+    $ python3 main.py -c arquivo.txt
+    $ python3 main.py -l arquivo.txt''')
     return
 
 
 ############### Funções que geram maquinas de estados ####################
-# Como são no máximo duas maquinas essa funcões manipula duas variaveis ja instanciadas(eduardo) 
-# Serve apenas como refatoração do codigo main() (eduardo)
-# Será que essas funções deveriam ser modularizadas? (eduardo)
+# Como são no máximo duas maquinas essa funcões manipula duas variaveis ja instanciadas
+# Serve apenas como refatoração do codigo main()
 
 def geraMaquina1(file):
     arquivo = open(file, 'r')
@@ -183,7 +183,7 @@ def main():
                 new_maquina = complemento(maquina_convert)
                 print(saidaAuto(new_maquina["estados"], new_maquina["inicial"], new_maquina["aceita"], new_maquina["transicao"]))
             else:
-                print("\nComo o automato '" + file + "' já é uma AFD, Será realizado o complemento diretamente sem conversão.add()\n")
+                print("\nComo o automato '" + file + "' já é uma AFD, Será realizado o complemento diretamente sem conversão.\n")
                 new_maquina = complemento(maquina)
                 print(saidaAuto(new_maquina["estados"], new_maquina["inicial"], new_maquina["aceita"], new_maquina["transicao"]))
         else:

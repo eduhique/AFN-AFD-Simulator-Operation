@@ -16,8 +16,6 @@ def conversao(maquina_1):
     result["transicao"] = organizaTransicoes(transicoes)
     return result
 
-######### Precisa ser revisto ##########
-
 def organizaEstados(new_estados):
     result = []
     for elemento in new_estados:
@@ -55,7 +53,6 @@ def geraTransicao(list_transicao, new_estados):
             for elemento in list_transicao:
                 if (elemento[0] in estado and (elemento[2] == entrada) and elemento[1] not in aux):
                     aux.append(elemento[1])
-                    # Gambiarra para resolver probema no caso entrada7.txt
                     if([elemento[1], elemento[0], "e"] in casos_epson and elemento[0] not in aux):
                         aux.append(elemento[0])
             aux.sort()
@@ -72,15 +69,8 @@ def geraIncial(maquina_1, lista_estados):
     for e in maquina_1["transicao"]:
         if e[0] == inicial_ant and e[2] == "e" and (e[1] not in result):
             result.append(e[1])
-        # Verificar com o prof se a volta tambem conta...
-        # if e[1] == inicial_ant and e[2] == "e" and (e[0] not in result):
-        #     result.append(e[0])
     if result in lista_estados:
         return result
-    else:
-        # Forçar um erro aqui
-        pass
-
 
 def geraEstados(lista_estados):
     result = [x for x in powerset(lista_estados)]

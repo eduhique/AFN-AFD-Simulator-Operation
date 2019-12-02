@@ -1,6 +1,5 @@
 # coding: utf-8
 
-# Função testada usando os arquivos entrada1.txt e entrada2.txt (eduardo) 
 def uniao(maquina_1, maquina_2):
     result = {}
     lista_estados = ["N"]
@@ -29,7 +28,6 @@ def uniao(maquina_1, maquina_2):
     return result
 
 
-# Função testada usando os arquivos entrada1.txt e entrada2.txt. Resultado armazenado no arquivo intersecao-entrada1-e-entrada2.txt (#Euclides)
 def intersecao(maquina_1, maquina_2):
     result = {}
     lista_estados = []
@@ -57,21 +55,21 @@ def intersecao(maquina_1, maquina_2):
 
 def estrela(maquina_1):
     result = {}
-    lista_estados = ["N"]
-    inicial = "N"
+    lista_estados = ["q0"]
+    inicial = "q0"
     lista_transicao = maquina_1["transicao"]
     for elemento in maquina_1["estados"]:
         lista_estados.append((elemento))
-    lista_transicao.append(["N", maquina_1["inicial"], "e"])
+    lista_transicao.append(["q0", maquina_1["inicial"], "e"])
     for elemento in maquina_1["aceita"]:
-        lista_transicao.append([elemento, "N",  "e"])
+        lista_transicao.append([elemento, "q0",  "e"])
     result["estados"] = lista_estados
     result["inicial"] = inicial
     result["aceita"] = maquina_1["aceita"]
+    result["aceita"].append("q0") 
     result["transicao"] = lista_transicao
     return result
 
-# Tem que verificar um detalhe com o professor (eduardo) 
 # De acordo com o prof, está solução só funciona para AFD, portanto, para AFN deve-se converter e depois operar sobre
 def complemento(maquina_1):
     result = {}
