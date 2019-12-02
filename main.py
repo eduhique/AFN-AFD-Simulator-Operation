@@ -24,7 +24,7 @@ def usage():
     -u  --uniao
     -i  --intersecao
     -e  --estrela
-    -c  --complemento
+    -l  --complemento
 
 
     Exemplos:
@@ -33,6 +33,7 @@ def usage():
     $ main.py -i arquivo1.txt arquivo2.txt
     $ main.py -c arquivo.txt
     $ main.py -e arquivo.txt
+    $ main.py -l arquivo.txt
     ''')
     sys.exit()
 
@@ -42,10 +43,10 @@ Exemplos de execucao:
 
     $ main.py -s arquivo.txt palavra
     $ main.py -u arquivo1.txt arquivo2.txt
-    $ main.py -i arquivo.txt arquivo1.txt arquivo2.txt
+    $ main.py -i arquivo1.txt arquivo2.txt
     $ main.py -e arquivo.txt
     $ main.py -c arquivo.txt
-    $ main.py -co arquivo.txt''')
+    $ main.py -l arquivo.txt''')
     return
 
 
