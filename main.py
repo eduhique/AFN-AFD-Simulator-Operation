@@ -1,8 +1,5 @@
 # coding: utf-8
 
-# Onde estamos -> A CLI esta quase 100%, a unica coisa que falta eh retornar um erro quando o argumento eh invalido (#WeS)
-#              -> Refatorar o codigo que tinha sido feito anteriormente para o modelo abaixo (Acho que fica mais bonito #WeS)
-#
 import sys
 import getopt
 from simulador import simulador
@@ -38,6 +35,19 @@ def usage():
     $ main.py -e arquivo.txt
     ''')
     sys.exit()
+
+def retornoErros():
+    print ('''Confira a linha de comando, esta faltando argumentos.
+Exemplos de execucao:
+
+    $ main.py -s arquivo.txt palavra
+    $ main.py -u arquivo1.txt arquivo2.txt
+    $ main.py -i arquivo.txt arquivo1.txt arquivo2.txt
+    $ main.py -e arquivo.txt
+    $ main.py -c arquivo.txt
+    $ main.py -co arquivo.txt''')
+    return
+
 
 ############### Funções que geram maquinas de estados ####################
 # Como são no máximo duas maquinas essa funcões manipula duas variaveis ja instanciadas(eduardo) 
@@ -109,31 +119,28 @@ def main():
     ###### Trata a entrada para saber se esta de acordo com a especificação ######
     comandLine = sys.argv[1:]
     if len(comandLine) > 3 or len(comandLine) < 2:
-        print ('''Confira a linha de comando, esta faltando argumentos.
-Exemplos de execucao:
-
-    $ main.py -s arquivo.txt palavra
-    $ main.py -u arquivo1.txt arquivo2.txt
-    $ main.py -i arquivo.txt arquivo1.txt arquivo2.txt
-    $ main.py -e arquivo.txt
-    $ main.py -c arquivo.txt
-    $ main.py -co arquivo.txt''')
-        return
-    
+        retornoErros()
+ 
     ###### Captura o arquivo que sera lido ######
-    file = comandLine[1]
-    
+    try:
+        file = comandLine[1]
+    except:
+        return
     ###### Captura a linha de comando e faz a verificao para agir com tal   ######
     try:
         opts, args = getopt.getopt(sys.argv[1:], "s:c:u:i:e:l", [
                                    "simulador=", "conversao=", "uniao=", "intersecao=", "estrela=", "complemento="])
     except getopt.GetoptError as err:
-        print (str(err))
+        retornoErros()
 
     for o, a in opts:
         if o in ("-s", "--simulador"):
             geraMaquina1(file)
-            palavra = comandLine[2]
+            try:
+                palavra = comandLine[2]
+            except:
+                retornoErros()
+                return
             print("Todos os caminhos tentados:\n\nEstado       Palavra")
             result_simula = simulador(maquina["inicial"], maquina["transicao"], palavra, maquina["aceita"])
             if (result_simula.split("\n")[-1] == "palavra aceita"):

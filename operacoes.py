@@ -1,5 +1,6 @@
+# coding: utf-8
 
-# função testada usando os arquivos entrada1.txt e entrada2.txt (eduardo) 
+# Função testada usando os arquivos entrada1.txt e entrada2.txt (eduardo) 
 def uniao(maquina_1, maquina_2):
     result = {}
     lista_estados = ["N"]

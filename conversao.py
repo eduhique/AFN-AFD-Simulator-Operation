@@ -1,3 +1,4 @@
+# coding: utf-8
 
 def conversao(maquina_1):
     result = {}

@@ -1,4 +1,6 @@
-# função testada com algumas palavras usando os arquivos entrada1.txt, entrada2.txt, entrada4.txt e entrada.txt (eduardo) 
+# coding: utf-8
+
+# Função testada com algumas palavras usando os arquivos entrada1.txt, entrada2.txt, entrada4.txt e entrada.txt (eduardo) 
 def simulador(estado_atual, lista_de_transicoes, palavra, estado_de_aceitacao):
     if((estado_atual in estado_de_aceitacao) and ((len(palavra) == 0))):
         print (estado_atual + "            e")

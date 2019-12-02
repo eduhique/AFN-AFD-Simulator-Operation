@@ -1,3 +1,5 @@
+# coding: utf-8
+
 def saidaAuto(lista_estados, inicial, lista_aceita, lista_transicao):
     result = "\nAutomato: \n\nestados "
     inicial_saida = "inicial " + inicial
